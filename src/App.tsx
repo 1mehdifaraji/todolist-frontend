@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import axios from "axios";
 
-import TodoList from "./components/TodoList";
+import { TodoList } from "./components";
 
 const App: FC = () => {
   const [list, setList] = useState<TodoList | []>([]);

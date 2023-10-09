@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fortawesome/fontawesome-free':
+    specifier: ^6.4.2
+    version: 6.4.2
   '@testing-library/jest-dom':
     specifier: ^5.16.5
     version: 5.16.5
@@ -29,6 +32,9 @@ dependencies:
   axios:
     specifier: ^1.5.1
     version: 1.5.1
+  font-awesome:
+    specifier: ^4.7.0
+    version: 4.7.0
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -1609,6 +1615,12 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@fortawesome/fontawesome-free@6.4.2:
+    resolution: {integrity: sha512-m5cPn3e2+FDCOgi1mz0RexTUvvQibBebOUlUlW0+YrMjDTPkiJ6VTKukA1GRsvRw+12KyJndNjj0O4AgTxm2Pg==}
+    engines: {node: '>=6'}
+    requiresBuild: true
     dev: false
 
   /@humanwhocodes/config-array@0.11.8:
@@ -5018,6 +5030,11 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dev: false
+
+  /font-awesome@4.7.0:
+    resolution: {integrity: sha512-U6kGnykA/6bFmg1M/oT9EkFeIYv7JlX3bozwQJWiiLz6L0w3F5vBVPxHlwyX/vtNq1ckcpRKOB9f2Qal/VtFpg==}
+    engines: {node: '>=0.10.3'}
     dev: false
 
   /for-each@0.3.3:
