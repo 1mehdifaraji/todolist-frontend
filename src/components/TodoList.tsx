@@ -1,50 +1,52 @@
-import React, { FC, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import axios from "axios";
 
-import { ListDisplay, ListInput } from ".";
+import { ErrorDisplay, ListDisplay, ListInput } from ".";
 
-const TodoList: FC<any> = ({ data }) => {
+interface TodoListProps {
+  data: TodoList;
+  setList: Dispatch<SetStateAction<TodoList>>;
+}
+
+const TodoList: FC<TodoListProps> = ({ data, setList }) => {
   const [state, setState] = useState({
-    items: data,
     nextItem: "",
   });
 
-  const itemAdder = () => {
-    if (state.nextItem) {
-      setState((prevState) => ({
-        nextItem: "",
-        items: prevState.items?.concat({
+  const [err, setErr] = useState<boolean>(false);
+
+  const itemAdder = (): void => {
+    if (state.nextItem)
+      axios
+        .post("/list", {
           description: state.nextItem,
           isCompleted: false,
-        }),
-      }));
-    }
+        })
+        .then(({ data }) => {
+          setList(data.list);
+          setState({ nextItem: "" });
+        })
+        .catch(() => setErr(true));
   };
 
-  const itemRemover = (removeIndex: any) => {
-    //todo remove item by index from list
+  const itemRemover = (description: string): void => {
+    axios
+      .delete(`/list/${description}`)
+      .then(({ data }) => setList(data.list))
+      .catch(() => setErr(true));
   };
 
-  const itemCompleter = (event: any, indexToComplete: any) => {
-    function completeItem(myarray: any, indexToComplete: any) {
-      return myarray.map(function (elem: any, index: any) {
-        if (index === indexToComplete) elem.isCompleted = !elem.isCompleted;
-        return elem;
-      });
-    }
-    const editedItems = completeItem(state.items, indexToComplete);
-
-    setState((prevState) => ({
-      nextItem: prevState.nextItem,
-      items: [...editedItems],
-    }));
+  const itemCompleter = (description: string): void => {
+    axios
+      .put("/list", { description })
+      .then(({ data }) => setList(data.list))
+      .catch(() => setErr(true));
   };
 
-  const itemInputChange = (e: any) => {
+  const itemInputChange = (e: React.ChangeEvent<HTMLInputElement>): void =>
     setState((prevState) => ({
       nextItem: e.target.value,
-      items: prevState.items,
     }));
-  };
 
   return (
     <div className="listContainer">
@@ -53,11 +55,15 @@ const TodoList: FC<any> = ({ data }) => {
         getInputValue={itemInputChange}
         nextItem={state.nextItem}
       />
-      <ListDisplay
-        listItems={state.items}
-        itemRemover={itemRemover}
-        itemCompleter={itemCompleter}
-      />
+      {err ? (
+        <ErrorDisplay setErr={setErr} />
+      ) : (
+        <ListDisplay
+          listItems={data}
+          itemRemover={itemRemover}
+          itemCompleter={itemCompleter}
+        />
+      )}
     </div>
   );
 };

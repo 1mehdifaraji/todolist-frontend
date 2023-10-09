@@ -1,19 +1,26 @@
 import { FC } from "react";
 
-const ListInput: FC<any> = (props) => {
+interface ListInputProps {
+  getInputValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  nextItem: string;
+  itemAdder: () => void;
+}
+
+const ListInput: FC<ListInputProps> = ({
+  getInputValue,
+  nextItem,
+  itemAdder,
+}) => {
   return (
     <div className="ListInputUI">
       <input
         type="text"
         className="taskInput"
         placeholder="Enter a task"
-        onChange={props.getInputValue}
-        value={props.nextItem}
+        onChange={getInputValue}
+        value={nextItem}
       />
-      <button
-        onClick={() => props.itemAdder()}
-        className="taskButton fa fa-fw fa-plus"
-      />
+      <button onClick={itemAdder} className="taskButton fa fa-fw fa-plus" />
     </div>
   );
 };

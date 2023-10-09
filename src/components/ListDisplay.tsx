@@ -1,16 +1,26 @@
 import { FC } from "react";
 
-const ListDisplay: FC<any> = (props) => {
+interface ListDisplayProps {
+  listItems: TodoList;
+  itemRemover: (description: string) => void;
+  itemCompleter: (description: string) => void;
+}
+
+const ListDisplay: FC<ListDisplayProps> = ({
+  listItems,
+  itemRemover,
+  itemCompleter,
+}) => {
   return (
     <ul className="taskList">
-      {props.listItems?.map((item: any, index: any) => (
+      {listItems?.map(({ description, isCompleted }: Todo, index: any) => (
         <ListItem
           key={index}
           index={index}
-          taskDesc={item.description}
-          isCompleted={item.isCompleted}
-          itemCompleter={props.itemCompleter}
-          itemRemover={props.itemRemover}
+          taskDesc={description}
+          isCompleted={isCompleted}
+          itemCompleter={itemCompleter}
+          itemRemover={itemRemover}
         />
       ))}
     </ul>
@@ -19,23 +29,30 @@ const ListDisplay: FC<any> = (props) => {
 
 export default ListDisplay;
 
-const ListItem: FC<any> = (props) => {
+interface ListItemProps {
+  itemCompleter: (description: string) => void;
+  itemRemover: (description: string) => void;
+  isCompleted: boolean;
+  taskDesc: string;
+  index: number;
+}
+
+const ListItem: FC<ListItemProps> = ({
+  itemCompleter,
+  index,
+  isCompleted,
+  taskDesc,
+  itemRemover,
+}) => {
   return (
     <li>
       <input
         type="checkbox"
-        onChange={(event) => props.itemCompleter(event, props.index)}
-        checked={props.isCompleted}
+        onChange={() => itemCompleter(taskDesc)}
+        checked={isCompleted}
       />
-      <span
-      //       className={props.isCompleted ? "itemCompleted" : null}
-      >
-        {props.taskDesc}
-      </span>
-      <button
-        onClick={() => props.itemRemover(props.index)}
-        className="fa fa-trash"
-      />
+      <span className={isCompleted ? "itemCompleted" : ""}>{taskDesc}</span>
+      <button onClick={() => itemRemover(taskDesc)} className="fa fa-trash" />
     </li>
   );
 };
