@@ -4,7 +4,7 @@ import axios from "axios";
 import TodoList from "./components/TodoList";
 
 const App: FC = () => {
-  const [list, setList] = useState<[]>([]);
+  const [list, setList] = useState<TodoList | []>([]);
 
   const getListData = async () => {
     const { data } = await axios.get("/list");
@@ -15,7 +15,7 @@ const App: FC = () => {
     getListData();
   }, []);
 
-  return <TodoList data={list}></TodoList>;
+  return <TodoList data={list} />;
 };
 
 export default App;
